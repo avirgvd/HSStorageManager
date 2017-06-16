@@ -1,0 +1,23 @@
+{
+  "sm_containers": [
+    {"id":"1", "name": "Persistent Storage", "policyJSON": {}, "osdID": "1", "description": "For tier-1 user files"},
+    {"id":"2", "name": "Persistent Storage 2", "policyJSON": {}, "osdID": "3", "description": "For tier-2 user files"},
+    {"id":"3", "name": "Thumbnails", "policyJSON": {}, "osdID": "2", "description": "For file cache"},
+    {"id":"4", "name": "File Cache", "policyJSON": {}, "osdID": "2", "description": "For thumbnails of images, video and PDFs"},
+    {"id":"5", "name": "Backup", "policyJSON": {}, "osdID": "5"},
+    {"id":"6", "name": "System", "policyJSON": {}, "osdID": "1", "description": "For System files"}
+  ],
+  "osds": [
+    { "id": "localhdd1", "protocol": "file", "device-id": "", "device-type": "localHDD", "credentials": {}, "path": "/home/govind/HomeServer/LOCALSTORAGE"},
+    { "id": "localsdd1", "protocol": "file", "description": "For file cache", "device-id": "", "device-type": "localHDD", "credentials": {}, "path": "/home/govind/HomeServer/LOCALSDD"},
+    { "id": "google-drive", "protocol": "url", "description": "For tier-2 user files", "device-id": "", "device-type": "cloud", "credentials": {}, "path": ""},
+    { "id": "cloud-s3", "protocol": "url", "description": "For tier-2 user files", "device-id": "", "device-type": "cloud", "credentials": {}, "path": ""},
+    { "id": "usb", "protocol": "file", "description": "Backup or tier-2 user files", "device-id": "", "device-type": "USB-mass-storage", "credentials": {}, "path": ""},
+    { "id": "nfs", "protocol": "nfs", "description": "Backup or tier-2 user files", "device-id": "", "device-type": "For tier-3 user content", "credentials": {}, "path": ""}
+  ]
+
+
+
+
+
+}
