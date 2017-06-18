@@ -52,6 +52,41 @@ function initIndices (allIndices, callback) {
 
   Promise.all(promises).then((result) => {
     console.log("initIndices promise all: ", result);
+
+    // Now create the index for each container/bucket
+    let param = {
+      index: "sm_oscontainersindex"
+
+    };
+    _client.search(param, (err, resp) => {
+      if(err) {
+
+      } else if(!resp) {
+
+      } else {
+
+        console.log("containers: ", resp.hits.hits);
+        _.map(resp.hits.hits, (bucket) => {
+          console.log("bucket: ", bucket._source);
+
+          return _client.indices.exists({
+            index: "sm_osdindex" + bucket._source.id,
+          }).then((exists) => {
+            if (!exists) {
+              console.log("initIndices creating the index: ", "sm_objectstoreindex_" + bucket._source.id);
+              var indexconfig = esIndicesConfig.storagemanagerIndices.sm_objectstoreindex;
+              indexconfig.index = "sm_objectstoreindex_" + bucket._source.id;
+              return _client.indices.create(indexconfig);
+            }
+            console.log("returning undefined");
+            return undefined;
+          });
+
+        });
+
+      }
+    });
+
     callback();
   }).catch((err) => {
     log.error('failed to create inices', err);
@@ -68,6 +103,8 @@ function getItem(index, id, query, callback) {
 
   };
 
+  console.log("getItem: param: ", param);
+
   _client.search(param, (err, resp) => {
     if(err) {
       console.log("some error with the query: ", err);
@@ -78,7 +115,11 @@ function getItem(index, id, query, callback) {
     } else {
       console.log("getItem: resp length: ",resp.hits.hits.length);
       console.log("getItem: resp: ",resp.hits.hits);
-      callback(undefined, resp.hits.hits[0]._source);
+
+      if(resp.hits.hits.length)
+        callback(undefined, resp.hits.hits[0]._source);
+      else
+        callback({"error": "empty result!"});
 
     }
   });

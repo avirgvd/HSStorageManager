@@ -34,8 +34,8 @@ var LocalStorage = {
 
   },
 
-  readFile: function(bucket, objID) {
-    return fs.createReadStream(LOCAL_STORAGE_PATH + bucket + objID);
+  readFile: function(osd, relativepath) {
+    return fs.createReadStream(osd.path + "/" + relativepath);
 
   },
 

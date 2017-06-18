@@ -76,25 +76,25 @@ app.post('/rest/objects', function(req, resp){
 
 });
 
-app.post('/rest/file', function(err, resp){
+app.post('/rest/file', function(req, resp){
 
   console.log("POST /rest/objects req.body: ", req.body);
 
   var params = req.body.params;
 
   storagemanager.getFile(params.bucket, params.objid, function(err, filestream, filemeta){
-    resp.writeHead(200, {
-      'Content-Type': filemeta.mimetype,
-      'Content-Length': filemeta.size
-    });
-    
+
+    resp.setHeader('Content-Type', filemeta.mimetype);
+    resp.setHeader('Content-Length', filemeta.size);
     filestream.pipe(resp);
   });
 
 });
 
 
-
+/**
+ * This is handler for upload files action from the UI
+ */
 app.post('/rest/upload', function(req, res){
   // console.log("####get params: ", req);
   console.log("####write file: ", req.headers);
