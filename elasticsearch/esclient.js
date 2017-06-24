@@ -115,9 +115,10 @@ function getItem(index, id, query, callback) {
     } else {
       console.log("getItem: resp length: ",resp.hits.hits.length);
       console.log("getItem: resp: ",resp.hits.hits);
+      console.log("getItem: resp: ",resp.hits.hits[0]['_source']);
 
       if(resp.hits.hits.length)
-        callback(undefined, resp.hits.hits[0]._source);
+        callback(undefined, resp.hits.hits[0]['_source']);
       else
         callback({"error": "empty result!"});
 
@@ -137,26 +138,31 @@ function getItems( index, params, query, callback1) {
   if(index === "digitallibrary")
     indexName = "documents";
 
-  let body = {};
+  let body = (query == undefined)? {'query': {}} : {};
 
+
+  //TODO: The below code needs improvement
   if(query.hasOwnProperty('query') && query.query.hasOwnProperty('camerafilter')) {
     console.log("$%$%$$%$%$%$%$%$%$%$");
     let q = {match: {['exif.Exif IFD0.Model'] : query.query.camerafilter}};
     body.query = q;
+  } else if(query.hasOwnProperty('query')){
+    body.query = query.query;
+
   }
 
   // the search can take fields and their values for filtering the resultset
   // The body section of the query statement 'param' will have filter conditons specified
-  let param = {
+  let searchrequest = {
     index: indexName,
     from: params.from,
     size: params.size,
     body: body
   };
 
-  console.log("getItems param: ", JSON.stringify(param));
+  console.log("getItems searchrequest: ", JSON.stringify(searchrequest));
 
-  return _client.search( param,
+  return _client.search( searchrequest,
     ( err, resp ) => {
       if ( err ) {
         console.log("getItems: err: ",err);

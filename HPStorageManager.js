@@ -115,7 +115,9 @@ var HStorageManager = {
     // import date of the file
     var d = new Date();
     d.setTimezone('UTC');
-    filedata.import_date = d.toString();
+    // get current time in ISO8601 format which supports lexicographical sorting
+    // Ref: https://en.wikipedia.org/wiki/ISO_8601
+    filedata.import_date = d.toISOString();
 
     var osdcount = bucket.osds.length;
 
@@ -142,11 +144,15 @@ var HStorageManager = {
 
   getFile: function(bucket, objID, callback) {
 
+    console.log("getFile: bucket: ", bucket);
+    console.log("getFile: objID: ", objID);
+
     let bucketObj = hashtable_buckets.get(bucket);
 
     var bucket_index = "sm_objectstoreindex" + "_" + bucket;
 
-    esclient.getItem(bucket_index, objID, {"match_all":{}}, function(err, result){
+    // esclient.getItem(bucket_index, objID, {"match_all":{}}, function(err, result){
+    esclient.getItem(bucket_index, objID, {"match":{"id": objID}}, function(err, result){
       console.log("getFile: result: ", JSON.stringify(result));
       console.log("getFile: result: ", result.size);
 
@@ -178,11 +184,16 @@ var HStorageManager = {
   },
 
   getFileFromPath: function(path) {
+    console.log("getFileFromPath: path: ", path);
 
     var array = path.split(':');
 
     if(array.length === 2) {
       let osd = hashtable_OSDs.get(array[0]);
+
+      console.log("getFileFromPath: hashtable_osds: ", hashtable_OSDs.keys().toString());
+      console.log("getFileFromPath: array: ", array);
+      console.log("getFileFromPath: osd: ", osd);
       let filepath = osd.path + "/" + array[1];
 
       console.log("getFileFromPath: actual file path is: ", filepath);
@@ -305,7 +316,7 @@ var HStorageManager = {
 
   getobjects: function(bucket, query, callback) {
 
-    esclient.getItems('sm_objectstoreindex' + "_" + bucket, {}, {}, function(err, result){
+    esclient.getItems('sm_objectstoreindex' + "_" + bucket, {}, {'query': query}, function(err, result){
 
       console.log("getObjects: result: ", JSON.stringify(result));
       callback(err, result);

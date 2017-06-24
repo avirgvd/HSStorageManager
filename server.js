@@ -35,31 +35,34 @@ app.use(bodyParser.json());
  * The GET request should be typically like http://hostname:3000/<filename>
  * The request param 'file' has the file name to fetch
  * */
-app.get('/rest/:file', function(req, resp){
+app.get('/rest/file/:bucket/:file', function(req, resp){
   console.log("get query: ", req.query);
   console.log("get params: ", req.params);
   console.log("get file: ", req.params.file);
 
-  // getObjectMeta(req.params.file);
+  var params = req.params;
 
-  var file = '/home/govind/HomeServer/storage/staging/' + req.params.file;
+  storagemanager.getFile(params.bucket, params.file, function(err, filestream, filemeta){
 
-  if(req.query.hasOwnProperty('size')) {
-  }
-
-  var filestream = fs.createReadStream(file);
-  filestream.pipe(resp);
+    resp.setHeader('Content-Type', filemeta.mimetype);
+    resp.setHeader('Content-Length', filemeta.size);
+    filestream.pipe(resp);
+  });
 
 });
 
 
 // Moves specified file using ObjID to a target bucket and update object index
-app.post('/rest/move', function(req, resp){
+app.post('/rest/bulkmove', function(req, resp){
 
   var params = req.params;
+  var body = req.body;
   console.log("request params: ", params);
+  console.log("request body: ", body);
 
-  storagemanager.moveobject(params.objID, params.bucket);
+  resp.json({"result": "done"});
+
+  // storagemanager.moveobject(params.objID, params.bucket);
 
 });
 
@@ -68,17 +71,17 @@ app.post('/rest/objects', function(req, resp){
   console.log("POST /rest/objects req.body: ", req.body);
 
   var params = req.body.params;
+  var query = req.body.query;
 
-  storagemanager.getobjects(params.bucket, {}, function(err, result){
+  storagemanager.getobjects(params.bucket, query, function(err, result){
     resp.json({result: result});
   });
-
 
 });
 
 app.post('/rest/file', function(req, resp){
 
-  console.log("POST /rest/objects req.body: ", req.body);
+  console.log("POST /rest/file req.body: ", req.body);
 
   var params = req.body.params;
 
