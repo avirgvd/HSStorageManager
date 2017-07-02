@@ -90,7 +90,7 @@ var HStorageManager = {
 
   addNewFileIndex: function( bucket, filedata, callback1) {
 
-    console.log("esclient::stageNewFiles filedata: ", filedata);
+    console.log("esclient::addNewFileIndex filedata: ", filedata);
 
     // let data = esIndicesConfig.storagemanagerIndices.sm_objectstoreindex;
     // data.id = id;
@@ -103,10 +103,10 @@ var HStorageManager = {
     esclient.addItem(bucket_index, filedata, filedata.id, callback1);
   },
 
-  createFile: function(bucket, callback) {
+  createNewFile: function(bucket, callback) {
 
-    console.log("createFile bucket: ", bucket);
-    console.log("createFile number of osds in bucket: ", bucket.osds.length);
+    console.log("createNewFile bucket: ", bucket);
+    console.log("createNewFile number of osds in bucket: ", bucket.osds.length);
 
     //  First generate UUID for new file's ObjID
     let objID = uuidv4();
@@ -118,6 +118,15 @@ var HStorageManager = {
     // get current time in ISO8601 format which supports lexicographical sorting
     // Ref: https://en.wikipedia.org/wiki/ISO_8601
     filedata.import_date = d.toISOString();
+
+    HStorageManager.createFile(bucket, filedata, callback);
+
+  },
+
+  createFile: function(bucket, filedata, callback) {
+
+    console.log("createFile bucket: ", bucket);
+    console.log("createFile number of osds in bucket: ", bucket.osds.length);
 
     var osdcount = bucket.osds.length;
 
@@ -131,7 +140,14 @@ var HStorageManager = {
     console.log("osd: ", osd);
 
     if(osd['device-type'] == 'localSDD') {
+
       HStorageManager.createFile_localSDD(osd, filedata, callback);
+
+    }
+    else if (osd['device-type'] == 'localHDD') {
+
+      HStorageManager.createFile_localHDD(osd, filedata, callback);
+
     }
     else
     {
@@ -224,6 +240,15 @@ var HStorageManager = {
     callback(fs.createWriteStream(osd['path'] + '/' + filemeta.id), filemeta);
 
   },
+  createFile_localHDD: function (osd, filemeta, callback) {
+
+    console.log("createFile_localHDD: ", osd, " objID: ", filemeta.objID, " filemeta: ", filemeta);
+    // filemeta.path = osd['path'] + '/' + filemeta.id;
+    filemeta.path = osd['id'] + ':' + filemeta.id;
+
+    callback(fs.createWriteStream(osd['path'] + '/' + filemeta.id), filemeta);
+
+  },
 
   /**
    * Method: addfile
@@ -240,7 +265,7 @@ var HStorageManager = {
     //   var writerStream = fs.createWriteStream(objID);
     let bucketObj = hashtable_buckets.get(staging_bucket);
 
-    HStorageManager.createFile(bucketObj, function(writerStream, filedata){
+    HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
 
       var busboy = new Busboy({headers: req.headers});
 
@@ -274,7 +299,10 @@ var HStorageManager = {
         //  Add file record in objectstorageindex.
         HStorageManager.addNewFileIndex(bucketObj.id, filedata, function(){
 
-        })
+          console.log("addfile: addNewFileIndex: ");
+
+        });
+
       });
 
       busboy.on('error', function() {
@@ -283,13 +311,38 @@ var HStorageManager = {
         res.writeHead(303, { Connection: 'close', Location: '/' });
         res.end();
       });
+
       req.pipe(busboy);
 
+    });
+
+  },
+
+  _addfile: function (bucket, metadata, filestream, callback) {
+
+    console.log("_addfile: bucket: ", bucket);
+    console.log("_addfile: metadata: ", metadata);
+
+    let bucketObj = hashtable_buckets.get(bucket);
+
+    HStorageManager.createFile(bucketObj, metadata, function(writerStream, filedata){
+
+      filestream.pipe(writerStream);
+
+      //  Add file record in objectstorageindex.
+      HStorageManager.addNewFileIndex(bucketObj. id, filedata, function(){
+
+        console.log("_addfile: addNewFileIndex: ");
+        callback(undefined, filedata);
+
+      });
 
     });
 
 
+  },
 
+  _mergeMetaData: function (medatada1, metadata2) {
 
   },
 
@@ -316,7 +369,10 @@ var HStorageManager = {
 
   getobjects: function(bucket, query, callback) {
 
-    esclient.getItems('sm_objectstoreindex' + "_" + bucket, {}, {'query': query}, function(err, result){
+    console.log("getobjects: bucket: ", bucket);
+    console.log("getobjects: query: ", query);
+
+    esclient.getItems('sm_objectstoreindex_' + bucket, {}, {'query': query}, function(err, result){
 
       console.log("getObjects: result: ", JSON.stringify(result));
       callback(err, result);
@@ -324,6 +380,81 @@ var HStorageManager = {
     });
 
   },
+
+  bulkupdate: function(arrUpdateItems, callback) {
+
+    console.log("bulkupdate: ", arrUpdateItems);
+
+    var arrESUpdateItems = [];
+
+    arrUpdateItems.map(( updateItem) => {
+
+      console.log("updateItem: ", updateItem);
+
+      var indexname = HStorageManager.getIndexForBucket(updateItem['container']);
+
+      var index = {'update': {'_index': indexname, '_type': indexname, '_id': updateItem.id}};
+      var doc = {'doc': updateItem};
+
+      arrESUpdateItems = arrESUpdateItems.concat([index, doc]);
+
+    });
+
+    console.log("bulkupdate: arrESUpdateItems: ", arrESUpdateItems);
+
+    esclient.bulkupdate(arrESUpdateItems, function(err, resp){
+      console.log("bulkupdate: callback err: ", err);
+      console.log("bulkupdate: callback resp: ", resp);
+      callback(err, resp);
+    });
+
+  },
+
+  bulkmove: function(arrUpdateItems, callback) {
+
+    console.log("bulkmove: ", arrUpdateItems);
+
+    let promises = arrUpdateItems.map((item) => {
+
+      console.log("bulkmove: ", item);
+      return HStorageManager.getFile(item.sourcebucket, item.id, function(err, filestream, metadata){
+
+        console.log("bulkmove: err: ", err);
+        console.log("bulkmove: metadata: ", metadata);
+
+        metadata.container = item.targetbucket;
+        metadata.status = "online"; // this document will not be online
+
+        return HStorageManager._addfile(item.targetbucket, metadata, filestream, function(err, resp){
+
+
+        });
+
+      });
+
+    });
+
+    Promise.all(promises).then((results) => {
+      console.log("bulkmove: promises results: ". results);
+      callback();
+
+    });
+
+
+
+    // copy the file from source bucket to target bucket
+
+
+  },
+
+  getIndexForBucket: function(bucket) {
+    if(bucket == "staging") {
+      return "sm_objectstoreindex_staging";
+    } else if(bucket == "media1"){
+      return "sm_objectstoreindex_media1";
+
+    }
+  }
 
 
 

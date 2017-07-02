@@ -26,6 +26,7 @@ exports.deleteItem = deleteItem;
 exports.createIndex = createIndex;
 exports.initIndices = initIndices;
 exports.addItem = addItem;
+exports.bulkupdate = bulkupdate;
 
 function createIndex(indexDef) {
   _client.create(indexDef, function(error, response) {
@@ -287,6 +288,16 @@ function deleteItem(index, id, callback1) {
       callback1(error, response);
     });
   }
+
+}
+
+function bulkupdate(arrUpdateItems, callback) {
+
+  // the bulk call option "refresh" is required to ensure query right after the update gets the updated data
+  _client.bulk({'body': arrUpdateItems, 'refresh': "true"}, function(err, resp){
+
+    callback(err, resp);
+  });
 
 }
 

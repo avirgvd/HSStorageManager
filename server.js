@@ -11,7 +11,7 @@
 
 var express = require("express");
 var bodyParser = require('body-parser');
-var storagemanager = require('./HPStorageManager');
+var storagemanager = require('./HStorageManager');
 var fs = require('fs');
 
 var app = express();
@@ -57,12 +57,26 @@ app.post('/rest/bulkmove', function(req, resp){
 
   var params = req.params;
   var body = req.body;
-  console.log("request params: ", params);
-  console.log("request body: ", body);
+  console.log("/rest/bunkmove request params: ", params);
+  console.log("/rest/bunkmove request body: ", body);
 
-  resp.json({"result": "done"});
+  storagemanager.bulkmove(body, function(err, result){
+    resp.json({"result": "done"});
+  });
 
-  // storagemanager.moveobject(params.objID, params.bucket);
+});
+
+// Moves specified file using ObjID to a target bucket and update object index
+app.post('/rest/bulkupdate', function(req, resp){
+
+  var params = req.params;
+  var body = req.body;
+  console.log("/rest/bulkupdate request params: ", params);
+  console.log("/rest/bulkupdate request body: ", body);
+
+  storagemanager.bulkupdate(body, function(err, result){
+    resp.json({"result": "done"});
+  });
 
 });
 
