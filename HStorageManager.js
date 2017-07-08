@@ -13,6 +13,8 @@ var esclient = require('./elasticsearch/esclient');
 var localOSD = require('./OSDAccess/localstorage');
 var localSSD = require('./OSDAccess/localSDD');
 
+var hsthumbnails = require('./thumbnail/HSThumbnails');
+
 // Use Busboy to parse form-data from the uploaded file content.
 var Busboy = require('busboy');
 
@@ -100,13 +102,15 @@ var HStorageManager = {
     // console.log("esclient::sm_objectstoreindex data: ", data);
     var bucket_index = "sm_objectstoreindex" + "_" + bucket;
 
-    esclient.addItem(bucket_index, filedata, filedata.id, callback1);
+    esclient.addItem(bucket_index, filedata, filedata.id, function(err, resp){
+      callback1(err, resp);
+    });
   },
 
   createNewFile: function(bucket, callback) {
 
     console.log("createNewFile bucket: ", bucket);
-    console.log("createNewFile number of osds in bucket: ", bucket.osds.length);
+    // console.log("createNewFile number of osds in bucket: ", bucket.osds.length);
 
     //  First generate UUID for new file's ObjID
     let objID = uuidv4();
@@ -125,28 +129,34 @@ var HStorageManager = {
 
   createFile: function(bucket, filedata, callback) {
 
-    console.log("createFile bucket: ", bucket);
-    console.log("createFile number of osds in bucket: ", bucket.osds.length);
+    console.log("createFile: bucket: ", bucket);
+    console.log("createFile: filedata: ", filedata);
 
-    var osdcount = bucket.osds.length;
+    var bucketObj = hashtable_buckets.get(bucket);
 
-    // pick an osd randomly from the list of osds assigned to the bucket
+    console.log("createFile bucket: ", bucketObj);
+    console.log("createFile number of osds in bucket: ", bucketObj.osds.length);
+
+    var osdcount = bucketObj.osds.length;
+
+    // pick an osd randomly from the list of osds assigned to the bucketObj
     var osdpicked = Math.floor((Math.random() * osdcount) );
 
-    console.log("OSD picked: ", bucket.osds[osdpicked]);
+    console.log("OSD picked: ", bucketObj.osds[osdpicked]);
 
-    var osd = hashtable_OSDs.get( bucket.osds[osdpicked]);
+    var osd = hashtable_OSDs.get( bucketObj.osds[osdpicked]);
 
     console.log("osd: ", osd);
 
     if(osd['device-type'] == 'localSDD') {
 
-      HStorageManager.createFile_localSDD(osd, filedata, callback);
+      // HStorageManager.createFile_localSDD(osd, filedata, callback);
+      localSSD.createFile(osd, bucketObj, filedata, callback);
 
     }
     else if (osd['device-type'] == 'localHDD') {
 
-      HStorageManager.createFile_localHDD(osd, filedata, callback);
+      localOSD.createFile(osd, bucketObj, filedata, callback);
 
     }
     else
@@ -155,49 +165,88 @@ var HStorageManager = {
       callback();
     }
 
-
   },
 
-  getFile: function(bucket, objID, callback) {
+
+  getFile: function(bucket, objID, query, callback) {
 
     console.log("getFile: bucket: ", bucket);
     console.log("getFile: objID: ", objID);
 
     let bucketObj = hashtable_buckets.get(bucket);
 
-    var bucket_index = "sm_objectstoreindex" + "_" + bucket;
+    var bucket_index = "sm_objectstoreindex_" + bucket;
 
-    // esclient.getItem(bucket_index, objID, {"match_all":{}}, function(err, result){
-    esclient.getItem(bucket_index, objID, {"match":{"id": objID}}, function(err, result){
-      console.log("getFile: result: ", JSON.stringify(result));
-      console.log("getFile: result: ", result.size);
+    if(query['size'] === "small") {
+      // try thumbnails bucket
+      // return the file if found in thumbnails
+      // if not found then create thumbnail and then return it
+      var thumbnailmeta = hsthumbnails.lookup(objID);
 
-      var filestream = HStorageManager.getFileFromPath(result['path']);
+      console.log("getFile: thumbnail cache entry for objID: ", thumbnailmeta);
 
-      callback( undefined, filestream, result);
-    });
+      if(thumbnailmeta != undefined) {
+        // Thumbnail found in the cache
+        console.log("getFile: Thumbnail found in the cache!!!");
+        var filestream = HStorageManager.getFileFromPath(thumbnailmeta['path']);
+        callback(undefined, filestream, thumbnailmeta);
 
-    // localOSD.readFile(bucket, osd, objID);
-    //
-    // console.log("getFile: input bucket: ", bucket);
-    //
-    // console.log("getFile bucket.osds: ", bucketObj);
-    //
-    // bucketObj.osds.map((osd) => {
-    //   console.log("each osd: ", osd);
-    //   let osddata = hashtable_OSDs.get(osd);
-    //   console.log("osd data: ", JSON.stringify(osddata));
-    //   let path = osddata.path;
-    //   console.log("path: ", path);
-    //
-    //   if(fs.existsSync(path + '/' + objID)) {
-    //     console.log("file exists!!!!!!!!!!!!!!", path + '/' + objID);
-    //
-    //     callback( undefined, fs.createReadStream(path + '/' + objID), {'size': 202022});
-    //   }
-    // });
+      }
+      else {
+        console.log("getFile: Thumbnail NOT in cache!!!");
+        // esclient.getItem(bucket_index, objID, {"match_all":{}}, function(err, result){
+        esclient.getItem(bucket_index, objID, {"match":{"id": objID}}, function(err, result){
+          console.log("getFile: result: ", JSON.stringify(result));
+          console.log("getFile: result: ", result.size);
+
+          var filestream = HStorageManager.getFileFromPath(result['path']);
+          
+          var thumbnailstream = hsthumbnails.getThumbnail(result["mimetype"], filestream);
+
+          // The thumbnail doesnt exist so create one
+          // Now save this thumbnail to the bucket for thumbnails same time this file read stream is returned to caller
+
+          HStorageManager._addfile("thumbnails", {'id': objID}, thumbnailstream , function(err, resp){
+
+            console.log("getFile: added to thumbnails: ", resp);
+
+            // modify the path with path in thumbnails bucket
+            result['path'] = resp['path'];
+            result['size'] = resp['size'];
+            result['mimetype'] = "image/jpeg";
+
+
+            hsthumbnails.addthumbnail(objID, result);
+
+            var filestream1 = HStorageManager.getFileFromPath(result['path']);
+
+            console.log("^%^^%^%^%^ result: ", result);
+
+            callback(undefined, filestream1 , result);
+
+
+          });
+        });
+
+      }
+
+    }
+    else {
+      // esclient.getItem(bucket_index, objID, {"match_all":{}}, function(err, result){
+      esclient.getItem(bucket_index, objID, {"match":{"id": objID}}, function(err, result){
+        console.log("getFile: result: ", JSON.stringify(result));
+        console.log("getFile: result: ", result.size);
+
+        var filestream = HStorageManager.getFileFromPath(result['path']);
+
+        console.log("DDDDDDDD result: ". result);
+
+        callback( undefined, filestream, result);
+      });
+    }
 
   },
+
 
   getFileFromPath: function(path) {
     console.log("getFileFromPath: path: ", path);
@@ -216,10 +265,14 @@ var HStorageManager = {
 
       if(osd['device-type'] === "localSDD") {
         return localSSD.readFile(osd, array[1]);
-        
+
+      }
+      else if(osd['device-type'] === "localHDD") {
+        return localOSD.readFile(osd, array[1]);
+
       }
       else {
-        console.log("getFileFromPath: unsupported OSD device type: ", osd.device-type);
+        console.log("getFileFromPath: unsupported OSD device type: ", osd['device-type']);
       }
 
     }
@@ -235,16 +288,16 @@ var HStorageManager = {
 
     console.log("createFile_localSDD: ", osd, " objID: ", filemeta.objID, " filemeta: ", filemeta);
     // filemeta.path = osd['path'] + '/' + filemeta.id;
-    filemeta.path = osd['id'] + ':' + filemeta.id;
+    filemeta.path = osd['id'] + ':' + filemeta.objID;
 
-    callback(fs.createWriteStream(osd['path'] + '/' + filemeta.id), filemeta);
+    callback(fs.createWriteStream(osd['path'] + '/' + filemeta.objID), filemeta);
 
   },
   createFile_localHDD: function (osd, filemeta, callback) {
 
     console.log("createFile_localHDD: ", osd, " objID: ", filemeta.objID, " filemeta: ", filemeta);
     // filemeta.path = osd['path'] + '/' + filemeta.id;
-    filemeta.path = osd['id'] + ':' + filemeta.id;
+    filemeta.path = osd['id'] + ':' + filemeta.objID;
 
     callback(fs.createWriteStream(osd['path'] + '/' + filemeta.id), filemeta);
 
@@ -265,25 +318,43 @@ var HStorageManager = {
     //   var writerStream = fs.createWriteStream(objID);
     let bucketObj = hashtable_buckets.get(staging_bucket);
 
-    HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
+    // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
+    // HStorageManager.createNewFile(staging_bucket, function(writerStream, filedata){
 
       var busboy = new Busboy({headers: req.headers});
 
       busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype);
 
-        filedata.orgfilename = filename;
-        filedata.encoding = encoding;
-        filedata.mimetype = mimetype;
+        // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
+        HStorageManager.createNewFile(staging_bucket, function(writerStream, filedata){
 
-        file.on('data', function(data) {
-          console.log('File [' + fieldname + '] got ' + data.length + ' bytes');
-          filedata.size += data.length;
-          writerStream.write(data);
+          filedata.orgfilename = filename;
+          filedata.encoding = encoding;
+          filedata.mimetype = mimetype;
+
+          file.on('data', function(data) {
+            console.log('File [' + fieldname + '] got ' + data.length + ' bytes');
+            filedata.size += data.length;
+            writerStream.write(data);
+          });
+
+          file.on('end', function() {
+            console.log('on end File [' + fieldname + '] Finished');
+            writerStream.close();
+            //  Add file record in objectstorageindex.
+            HStorageManager.addNewFileIndex(bucketObj.id, filedata, function(){
+
+              console.log("addfile: addNewFileIndex: ");
+
+            });
+
+          });
+
+
         });
-        file.on('end', function() {
-          console.log('on end File [' + fieldname + '] Finished');
-        });
+
+
       });
 
       busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
@@ -292,16 +363,10 @@ var HStorageManager = {
 
       busboy.on('finish', function() {
         console.log('Done parsing form!');
-        writerStream.end();
+        // writerStream.end();
         res.writeHead(303, { Connection: 'close', Location: '/' });
         res.end();
 
-        //  Add file record in objectstorageindex.
-        HStorageManager.addNewFileIndex(bucketObj.id, filedata, function(){
-
-          console.log("addfile: addNewFileIndex: ");
-
-        });
 
       });
 
@@ -314,7 +379,7 @@ var HStorageManager = {
 
       req.pipe(busboy);
 
-    });
+    // });
 
   },
 
@@ -325,19 +390,36 @@ var HStorageManager = {
 
     let bucketObj = hashtable_buckets.get(bucket);
 
-    HStorageManager.createFile(bucketObj, metadata, function(writerStream, filedata){
 
-      filestream.pipe(writerStream);
+    var filesize = 0;
 
-      //  Add file record in objectstorageindex.
-      HStorageManager.addNewFileIndex(bucketObj. id, filedata, function(){
+    HStorageManager.createFile(bucket, metadata, function(writerStream, filedata){
 
-        console.log("_addfile: addNewFileIndex: ");
-        callback(undefined, filedata);
+      // filestream.pipe(writerStream);
+
+      filestream.on('data', function(chunk) {
+
+        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        writerStream.write(chunk);
+        filesize += chunk.length;
+
+        console.log("#########Size so far is: ", filesize);
+      }).on('end', function() {
+        console.log("Ended................");
+        console.log("%%%%%%%%%%% before addNewFileIndex");
+        filedata['size'] = filesize;
+
+        //  Add file record in objectstorageindex.
+        HStorageManager.addNewFileIndex(bucket, filedata, function(){
+
+          console.log("_addfile: addNewFileIndex: ", filedata);
+          callback(undefined, filedata);
+
+        });
 
       });
-
     });
+
 
 
   },
@@ -374,7 +456,7 @@ var HStorageManager = {
 
     esclient.getItems('sm_objectstoreindex_' + bucket, {}, {'query': query}, function(err, result){
 
-      console.log("getObjects: result: ", JSON.stringify(result));
+      // console.log("getObjects: result: ", JSON.stringify(result));
       callback(err, result);
 
     });
@@ -417,7 +499,7 @@ var HStorageManager = {
     let promises = arrUpdateItems.map((item) => {
 
       console.log("bulkmove: ", item);
-      return HStorageManager.getFile(item.sourcebucket, item.id, function(err, filestream, metadata){
+      return HStorageManager.getFile(item.sourcebucket, item.id, {}, function(err, filestream, metadata){
 
         console.log("bulkmove: err: ", err);
         console.log("bulkmove: metadata: ", metadata);

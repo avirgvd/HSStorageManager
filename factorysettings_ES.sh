@@ -23,22 +23,22 @@ curl -XPOST localhost:9200/sm_osdindex/_bulk -d '
 
 curl -XPOST localhost:9200/sm_oscontainersindex/_bulk -d '
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "media1"}}
-{"id":"media1",  "policyJSON": {}, "osds": ["localhdd1", "localhdd2"], "description": "For tier-1 user files", "basepath": "/media1"}
+{"id":"media1",  "policyJSON": {}, "osds": ["localhdd1", "localhdd2"], "description": "For tier-1 user files", "basepath": "/media1", "bucketcategory": "media"}
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "media-old"}}
-{"id":"media-old",  "policyJSON": {}, "osds": ["google-drive"], "description": "For tier-2 user files", "basepath": "/media-old"}
+{"id":"media-old",  "policyJSON": {}, "osds": ["google-drive"], "description": "For tier-2 user files", "basepath": "/media-old", "bucketcategory": "media"}
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "backup"}}
-{"id":"backup",  "policyJSON": {}, "osds": ["usb"], "description": "For backup", "basepath": "/backup"}
+{"id":"backup",  "policyJSON": {}, "osds": ["usb"], "description": "For backup", "basepath": "/backup", "bucketcategory": "backup"}
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "thumbnails"}}
-{"id":"thumbnails",  "policyJSON": {}, "osds": ["localsdd1"], "description": "For tthumbnails for images, videos and PDFs", "basepath": "/thumbnails"}
+{"id":"thumbnails",  "policyJSON": {}, "osds": ["localsdd1"], "description": "For tthumbnails for images, videos and PDFs", "basepath": "/thumbnails", "bucketcategory": "thumbnails"}
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "docs"}}
-{"id":"docs",  "policyJSON": {}, "osds": ["localhdd1", "localhdd2"], "description": "For tier-1 user files", "basepath": "/docs"}
+{"id":"docs",  "policyJSON": {}, "osds": ["localhdd1", "localhdd2"], "description": "For tier-1 user files", "basepath": "/docs", "bucketcategory": "docs"}
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "docs-old"}}
-{"id":"docs-old",  "policyJSON": {}, "osds": ["localhdd1", "localhdd2"], "description": "For tier-2 user files", "basepath": "/docs-old"}
+{"id":"docs-old",  "policyJSON": {}, "osds": ["localhdd1", "localhdd2"], "description": "For tier-2 user files", "basepath": "/docs-old", "bucketcategory": "docs"}
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "system"}}
-{"id":"system",  "policyJSON": {}, "osds": ["localhdd1", "localhdd2"], "description": "For system files", "basepath": "/system"}
+{"id":"system",  "policyJSON": {}, "osds": ["localhdd1", "localhdd2"], "description": "For system files", "basepath": "/system", "bucketcategory": "system"}
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "system-cache"}}
-{"id":"system-cache",  "policyJSON": {}, "osds": ["localsdd1"], "description": "For system files", "basepath": "/system-cache"}
+{"id":"system-cache",  "policyJSON": {}, "osds": ["localsdd1"], "description": "For system files", "basepath": "/system-cache", "bucketcategory": "cache"}
 {"index": {"_index": "sm_oscontainersindex", "_type": "sm_oscontainersindex", "_id": "staging"}}
-{"id":"staging",  "policyJSON": {}, "osds": ["localsdd1"], "description": "Bucket for staging newly added file", "basepath": "/staging"}
+{"id":"staging",  "policyJSON": {}, "osds": ["localsdd1"], "description": "Bucket for staging newly added file", "basepath": "/staging", "bucketcategory": "staging"}
 '
 

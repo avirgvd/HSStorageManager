@@ -35,14 +35,16 @@ app.use(bodyParser.json());
  * The GET request should be typically like http://hostname:3000/<filename>
  * The request param 'file' has the file name to fetch
  * */
-app.get('/rest/file/:bucket/:file', function(req, resp){
+app.get('/rest/:bucket/:file', function(req, resp){
   console.log("get query: ", req.query);
   console.log("get params: ", req.params);
   console.log("get file: ", req.params.file);
 
   var params = req.params;
 
-  storagemanager.getFile(params.bucket, params.file, function(err, filestream, filemeta){
+  storagemanager.getFile(params.bucket, params.file, req.query, function(err, filestream, filemeta){
+
+    console.log("GET /rest/:bucket/:file filemeta: ", filemeta);
 
     resp.setHeader('Content-Type', filemeta.mimetype);
     resp.setHeader('Content-Length', filemeta.size);
@@ -99,7 +101,9 @@ app.post('/rest/file', function(req, resp){
 
   var params = req.body.params;
 
-  storagemanager.getFile(params.bucket, params.objid, function(err, filestream, filemeta){
+  storagemanager.getFile(params.bucket, params.objid, {}, function(err, filestream, filemeta){
+
+    console.log("POST /rest/file filemeta: ", filemeta);
 
     resp.setHeader('Content-Type', filemeta.mimetype);
     resp.setHeader('Content-Length', filemeta.size);

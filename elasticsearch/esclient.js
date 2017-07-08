@@ -104,7 +104,7 @@ function getItem(index, id, query, callback) {
 
   };
 
-  console.log("getItem: param: ", param);
+  console.log("getItem: param@#@@#@#@#@#@#@#@#: ", param);
 
   _client.search(param, (err, resp) => {
     if(err) {
@@ -114,6 +114,9 @@ function getItem(index, id, query, callback) {
       console.log("no error no response strange!");
       callback({'message': 'no error no response strange!'});
     } else {
+
+      console.log("getItem: param@@@@@@@@@@@@: ", param);
+
       console.log("getItem: resp length: ",resp.hits.hits.length);
       console.log("getItem: resp: ",resp.hits.hits);
       console.log("getItem: resp: ",resp.hits.hits[0]['_source']);

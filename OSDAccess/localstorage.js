@@ -5,37 +5,45 @@
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 
-const LOCAL_STORAGE_PATH = '/home/govind/HomeServer/LOCALSTORAGE/';
-
 var LocalStorage = {
 
-  createFile: function(bucket, objID){
+  createFile: function(osd, bucket, filedata, callback){
 
-    var bucketpath = LOCAL_STORAGE_PATH + bucket;
+    var bucketpath = osd['path'] + bucket['basepath'] + "/";
 
-    mkdirp( bucketpath, function (err) {
-      if (err)
-        console.error('createFile: ', err);
-      else
-        console.log('createFile: bucket path: ', bucketpath);
-    });
+    console.log("localStorage:createFile: bucketpath: ", bucketpath);
+    console.log("localStorage:createFile: filedata: ", filedata);
 
-    var writerStream = fs.createWriteStream(bucketpath + objID);
+    // TODO: this below action can be avoided if the bucket path in OSD is created at startup
+    // mkdirp( bucketpath, function (err) {
+    //   if (err)
+    //     console.error('createFile: ', err);
+    //   else
+    //     console.log('createFile: bucket path: ', bucketpath);
+    // });
+
+    console.log("localStorage:createFile: 123: ");
+
+
+    filedata.path =  osd['id'] + ":" + bucket['basepath'] + "/" + filedata.id;
+    console.log("localStorage:createFile: filedata.path: ", filedata.path);
+
+    var writerStream = fs.createWriteStream(bucketpath + filedata.id);
 
     writerStream.on('open', (chunk) => {
       console.log("From LocalStorage OSD on open...");
     });
     writerStream.on('close', () => {
-      console.log("From LocalStorage OSD on close <", objID, ">...");
+      console.log("From LocalStorage OSD on close <", filedata.id, ">...");
 
     });
 
-    return writerStream;
+    callback(writerStream, filedata);
 
   },
 
-  readFile: function(bucket, objID) {
-    return fs.createReadStream(LOCAL_STORAGE_PATH + bucket + objID);
+  readFile: function(osd, relativepath) {
+    return fs.createReadStream(osd.path + "/" + relativepath);
 
   },
 
