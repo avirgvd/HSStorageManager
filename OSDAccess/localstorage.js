@@ -32,13 +32,15 @@ var LocalStorage = {
 
     writerStream.on('open', (chunk) => {
       console.log("From LocalStorage OSD on open...");
+      callback(writerStream, filedata);
+      
     });
     writerStream.on('close', () => {
       console.log("From LocalStorage OSD on close <", filedata.id, ">...");
 
     });
 
-    callback(writerStream, filedata);
+
 
   },
 

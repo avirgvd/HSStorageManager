@@ -119,12 +119,13 @@ function getItem(index, id, query, callback) {
 
       console.log("getItem: resp length: ",resp.hits.hits.length);
       console.log("getItem: resp: ",resp.hits.hits);
-      console.log("getItem: resp: ",resp.hits.hits[0]['_source']);
 
-      if(resp.hits.hits.length)
+      if(resp.hits.hits.length) {
+        console.log("getItem: resp: ",resp.hits.hits[0]['_source']);
         callback(undefined, resp.hits.hits[0]['_source']);
+      }
       else
-        callback({"error": "empty result!"});
+        callback({"error": "empty result!"}, {});
 
     }
   });

@@ -46,9 +46,15 @@ app.get('/rest/:bucket/:file', function(req, resp){
 
     console.log("GET /rest/:bucket/:file filemeta: ", filemeta);
 
-    resp.setHeader('Content-Type', filemeta.mimetype);
-    resp.setHeader('Content-Length', filemeta.size);
-    filestream.pipe(resp);
+    if(filestream != undefined) {
+      resp.setHeader('Content-Type', filemeta.mimetype);
+      resp.setHeader('Content-Length', filemeta.size);
+      filestream.pipe(resp);
+    }
+    else{
+      resp.json({"result": "empty"});
+    }
+
   });
 
 });
@@ -123,7 +129,7 @@ app.post('/rest/upload', function(req, res){
 //  The target container should be "PERSISTENT_STORAGE" by default unless specified in request body
 
 
-  storagemanager.addfile(req, res);
+  storagemanager.addfiles(req, res);
 
 
 

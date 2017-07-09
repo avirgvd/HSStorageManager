@@ -27,14 +27,15 @@ var LocalSSD = {
         var writerStream = fs.createWriteStream(bucketpath + filedata.id);
 
         writerStream.on('open', (chunk) => {
-          console.log("LocalSSD: From LocalStorage OSD on open...");
+          console.log("LocalSSD: From LocalStorage OSD on open...", filedata.id);
+          callback(writerStream, filedata);
         });
         writerStream.on('close', () => {
           console.log("LocalSSD: From LocalStorage OSD on close <", filedata.id, ">...");
 
         });
 
-        callback(writerStream, filedata);
+
       // }
 
 

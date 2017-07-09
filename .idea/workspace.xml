@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/HStorageManager.js" line="208" />
-    <bookmark url="file://$PROJECT_DIR$/HStorageManager.js" line="385" />
+    <bookmark url="file://$PROJECT_DIR$/HStorageManager.js" line="206" />
+    <bookmark url="file://$PROJECT_DIR$/HStorageManager.js" line="397" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23730c51-e1be-48d2-bb74-6843c15b4643" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/thumbnail/HSThumbnails.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HStorageManager.js" afterPath="$PROJECT_DIR$/HStorageManager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OSDAccess/localSDD.js" afterPath="$PROJECT_DIR$/OSDAccess/localSDD.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OSDAccess/localstorage.js" afterPath="$PROJECT_DIR$/OSDAccess/localstorage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/elasticsearch/esclient.js" afterPath="$PROJECT_DIR$/elasticsearch/esclient.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/factorysettings_ES.sh" afterPath="$PROJECT_DIR$/factorysettings_ES.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
     </list>
     <ignored path="HSStorageManager.iws" />
@@ -37,8 +35,8 @@
       <file leaf-file-name="server.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1845">
-              <caret line="125" column="24" selection-start-line="125" selection-start-column="17" selection-end-line="125" selection-end-column="24" />
+            <state relative-caret-position="705">
+              <caret line="49" column="56" selection-start-line="49" selection-start-column="56" selection-end-line="49" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -57,8 +55,8 @@
       <file leaf-file-name="HStorageManager.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/HStorageManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="433">
-              <caret line="349" column="15" selection-start-line="349" selection-start-column="15" selection-end-line="349" selection-end-column="15" />
+            <state relative-caret-position="645">
+              <caret line="356" column="0" selection-start-line="356" selection-start-column="0" selection-end-line="361" selection-end-column="13" />
               <folding>
                 <element signature="e#0#39#0" expanded="false" />
               </folding>
@@ -69,8 +67,8 @@
       <file leaf-file-name="localSDD.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/OSDAccess/localSDD.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
+            <state relative-caret-position="405">
+              <caret line="33" column="79" selection-start-line="33" selection-start-column="79" selection-end-line="33" selection-end-column="79" />
               <folding />
             </state>
           </provider>
@@ -91,8 +89,8 @@
       <file leaf-file-name="localstorage.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/OSDAccess/localstorage.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="19" column="46" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
+            <state relative-caret-position="195">
+              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding>
                 <element signature="e#0#40#0" expanded="false" />
               </folding>
@@ -103,8 +101,8 @@
       <file leaf-file-name="esclient.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/elasticsearch/esclient.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="38" column="11" selection-start-line="38" selection-start-column="9" selection-end-line="38" selection-end-column="11" />
+            <state relative-caret-position="-1276">
+              <caret line="106" column="58" selection-start-line="106" selection-start-column="58" selection-end-line="106" selection-end-column="58" />
               <folding />
             </state>
           </provider>
@@ -136,13 +134,13 @@
         <option value="$PROJECT_DIR$/factorysettings_ES.json" />
         <option value="$PROJECT_DIR$/HPStorageManager.js" />
         <option value="$PROJECT_DIR$/factorysettings_ES.sh" />
-        <option value="$PROJECT_DIR$/elasticsearch/esclient.js" />
         <option value="$PROJECT_DIR$/elasticsearch/esIndicesConfig.js" />
-        <option value="$PROJECT_DIR$/OSDAccess/localSDD.js" />
         <option value="$PROJECT_DIR$/thumbnail/HSThumbnails.js" />
+        <option value="$PROJECT_DIR$/elasticsearch/esclient.js" />
         <option value="$PROJECT_DIR$/server.js" />
-        <option value="$PROJECT_DIR$/HStorageManager.js" />
         <option value="$PROJECT_DIR$/OSDAccess/localstorage.js" />
+        <option value="$PROJECT_DIR$/OSDAccess/localSDD.js" />
+        <option value="$PROJECT_DIR$/HStorageManager.js" />
       </list>
     </option>
   </component>
@@ -502,12 +500,13 @@
       <workItem from="1499442204915" duration="6528000" />
       <workItem from="1499483747678" duration="5666000" />
       <workItem from="1499504693054" duration="9993000" />
-      <workItem from="1499539816181" duration="799000" />
+      <workItem from="1499539816181" duration="1094000" />
+      <workItem from="1499579698982" duration="12593000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="246613000" />
+    <option name="totallyTimeSpent" value="259501000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -525,20 +524,20 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19492063" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20604914" sideWeight="0.50476193" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39859438" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2495238" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39658636" sideWeight="0.4952381" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09538153" sideWeight="0.4952381" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39981097" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="REST Client" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24967742" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3988658" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39981097" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -912,22 +911,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1845">
-          <caret line="125" column="24" selection-start-line="125" selection-start-column="17" selection-end-line="125" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/OSDAccess/localSDD.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/thumbnail/HSThumbnails.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -938,28 +921,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/elasticsearch/esclient.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1276">
+          <caret line="106" column="58" selection-start-line="106" selection-start-column="58" selection-end-line="106" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/OSDAccess/localstorage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="19" column="46" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
+        <state relative-caret-position="195">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
             <element signature="e#0#40#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/elasticsearch/esclient.js">
+    <entry file="file://$PROJECT_DIR$/OSDAccess/localSDD.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="38" column="11" selection-start-line="38" selection-start-column="9" selection-end-line="38" selection-end-column="11" />
+        <state relative-caret-position="405">
+          <caret line="33" column="79" selection-start-line="33" selection-start-column="79" selection-end-line="33" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="49" column="56" selection-start-line="49" selection-start-column="56" selection-end-line="49" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/HStorageManager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="349" column="15" selection-start-line="349" selection-start-column="15" selection-end-line="349" selection-end-column="15" />
+        <state relative-caret-position="645">
+          <caret line="356" column="0" selection-start-line="356" selection-start-column="0" selection-end-line="361" selection-end-column="13" />
           <folding>
             <element signature="e#0#39#0" expanded="false" />
           </folding>

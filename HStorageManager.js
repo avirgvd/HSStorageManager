@@ -134,8 +134,6 @@ var HStorageManager = {
 
     var bucketObj = hashtable_buckets.get(bucket);
 
-    console.log("createFile bucket: ", bucketObj);
-    console.log("createFile number of osds in bucket: ", bucketObj.osds.length);
 
     var osdcount = bucketObj.osds.length;
 
@@ -235,13 +233,22 @@ var HStorageManager = {
       // esclient.getItem(bucket_index, objID, {"match_all":{}}, function(err, result){
       esclient.getItem(bucket_index, objID, {"match":{"id": objID}}, function(err, result){
         console.log("getFile: result: ", JSON.stringify(result));
-        console.log("getFile: result: ", result.size);
+        console.log("getFile: result: ", result['size']);
 
-        var filestream = HStorageManager.getFileFromPath(result['path']);
+        if(result.hasOwnProperty('path')) {
+          var filestream = HStorageManager.getFileFromPath(result['path']);
 
-        console.log("DDDDDDDD result: ". result);
+          console.log("DDDDDDDD result: ". result);
 
-        callback( undefined, filestream, result);
+          callback( undefined, filestream, result);
+
+        }
+        else {
+
+          callback( {error: "nothing found"}, undefined, {});
+
+        }
+
       });
     }
 
@@ -310,7 +317,7 @@ var HStorageManager = {
    *
    * Description:
    */
-  addfile: function (req, res) {
+  addfiles: function (req, res) {
 
 
     // First add the file to staging area for extracting file meta data before moving it to persistent storage
@@ -321,63 +328,68 @@ var HStorageManager = {
     // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
     // HStorageManager.createNewFile(staging_bucket, function(writerStream, filedata){
 
-      var busboy = new Busboy({headers: req.headers});
+    var busboy = new Busboy({headers: req.headers});
 
-      busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-        console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype);
+    busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+      console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype);
 
-        // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
-        HStorageManager.createNewFile(staging_bucket, function(writerStream, filedata){
+      // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
+      HStorageManager.createNewFile(staging_bucket, function(writerStream, filedata){
+        console.log("addfiles: created the file: ", filedata);
 
-          filedata.orgfilename = filename;
-          filedata.encoding = encoding;
-          filedata.mimetype = mimetype;
+        filedata.orgfilename = filename;
+        filedata.encoding = encoding;
+        filedata.mimetype = mimetype;
 
-          file.on('data', function(data) {
-            console.log('File [' + fieldname + '] got ' + data.length + ' bytes');
-            filedata.size += data.length;
-            writerStream.write(data);
+        file.pipe(writerStream);
+
+        // file.on('data', function(data) {
+        //   console.log('File [' + filedata.id + '] got ' + data.length + ' bytes');
+        //   console.log("writestream is ", writerStream);
+        //   filedata.size += data.length;
+        //   writerStream.write(data);
+        //   console.log("write complete for ", filedata.id);
+        // });
+        //
+        // file.on('end', function() {
+        //   console.log('on end File [' + filedata.id + '] Finished');
+        //   var promise = writerStream.close();
+          //  Add file record in objectstorageindex.
+          HStorageManager.addNewFileIndex(bucketObj.id, filedata, function(){
+
+            console.log("addfiles: addNewFileIndex: ");
+
           });
-
-          file.on('end', function() {
-            console.log('on end File [' + fieldname + '] Finished');
-            writerStream.close();
-            //  Add file record in objectstorageindex.
-            HStorageManager.addNewFileIndex(bucketObj.id, filedata, function(){
-
-              console.log("addfile: addNewFileIndex: ");
-
-            });
-
-          });
-
-
-        });
+        //
+        // });
 
 
       });
 
-      busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
-        console.log('on Field [' + fieldname + ']: value: ' + inspect(val));
-      });
 
-      busboy.on('finish', function() {
-        console.log('Done parsing form!');
-        // writerStream.end();
-        res.writeHead(303, { Connection: 'close', Location: '/' });
-        res.end();
+    });
+
+    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
+      console.log('on Field [' + fieldname + ']: value: ' + inspect(val));
+    });
+
+    busboy.on('finish', function() {
+      console.log('Done parsing form!');
+      // writerStream.end();
+      res.writeHead(303, { Connection: 'close', Location: '/' });
+      res.end();
 
 
-      });
+    });
 
-      busboy.on('error', function() {
-        console.log('Error parsing form!');
-        writerStream.end();
-        res.writeHead(303, { Connection: 'close', Location: '/' });
-        res.end();
-      });
+    busboy.on('error', function() {
+      console.log('Error parsing form!');
+      writerStream.end();
+      res.writeHead(303, { Connection: 'close', Location: '/' });
+      res.end();
+    });
 
-      req.pipe(busboy);
+    req.pipe(busboy);
 
     // });
 
