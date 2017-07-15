@@ -343,25 +343,22 @@ var HStorageManager = {
 
         file.pipe(writerStream);
 
-        // file.on('data', function(data) {
-        //   console.log('File [' + filedata.id + '] got ' + data.length + ' bytes');
-        //   console.log("writestream is ", writerStream);
-        //   filedata.size += data.length;
-        //   writerStream.write(data);
-        //   console.log("write complete for ", filedata.id);
-        // });
-        //
-        // file.on('end', function() {
-        //   console.log('on end File [' + filedata.id + '] Finished');
-        //   var promise = writerStream.close();
-          //  Add file record in objectstorageindex.
+        file.on('data', function(data) {
+          console.log('File [' + filedata.id + '] got ' + data.length + ' bytes');
+          filedata.size += data.length;
+        });
+
+        file.on('end', function() {
+          console.log('on end File [' + filedata.id + '] Finished');
+          // var promise = writerStream.close();
+           // Add file record in objectstorageindex.
           HStorageManager.addNewFileIndex(bucketObj.id, filedata, function(){
 
             console.log("addfiles: addNewFileIndex: ");
 
           });
-        //
-        // });
+
+        });
 
 
       });
