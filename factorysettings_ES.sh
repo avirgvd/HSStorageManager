@@ -42,3 +42,26 @@ curl -XPOST localhost:9200/sm_oscontainersindex/_bulk -d '
 {"id":"staging",  "policyJSON": {}, "osds": ["localsdd1"], "description": "Bucket for staging newly added file", "basepath": "/staging", "bucketcategory": "staging"}
 '
 
+curl -XPOST localhost:9200/sm_objectstoreindex_system/_bulk -d '
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "contacts.png"}}
+{"id":"contacts.png",  "path": "localsdd1:/system/contacts.png", "size": "22856", "mimetype": "image/png"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "DigitalLibrary.png"}}
+{"id":"DigitalLibrary.png",  "path": "localsdd1:/system/DigitalLibrary.png", "size": "318405", "mimetype": "image/png"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Financials.png"}}
+{"id":"Financials.png",  "path": "localsdd1:/system/Financials.png", "size": "65731", "mimetype": "image/png"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "medical_records.png"}}
+{"id":"medical_records.png",  "path": "localsdd1:/system/medical_records.png", "size": "17080", "mimetype": "image/png"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "photos.png"}}
+{"id":"photos.png",  "path": "localsdd1:/system/photos.png", "size": "3376", "mimetype": "image/png"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Music.jpg"}}
+{"id":"Music.jpg",  "path": "localsdd1:/system/Music.jpg", "size": "7661", "mimetype": "image/jpeg"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Videos.jpg"}}
+{"id":"Videos.jpg",  "path": "localsdd1:/system/Videos.jpg", "size": "5376", "mimetype": "image/jpeg"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "travel.jpg"}}
+{"id":"travel.jpg",  "path": "localsdd1:/system/travel.jpg", "size": "8925", "mimetype": "image/jpeg"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Assets.jpg"}}
+{"id":"Assets.jpg",  "path": "localsdd1:/system/Assets.jpg", "size": "13585", "mimetype": "image/jpeg"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Unknown.jpg"}}
+{"id":"Unknown.jpg",  "path": "localsdd1:/system/Unknown.jpg", "size": "4705", "mimetype": "image/jpeg"}
+'
+

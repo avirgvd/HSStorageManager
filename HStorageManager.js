@@ -340,6 +340,7 @@ var HStorageManager = {
         filedata.orgfilename = filename;
         filedata.encoding = encoding;
         filedata.mimetype = mimetype;
+        filedata.params = {};
 
         file.pipe(writerStream);
 
@@ -367,7 +368,8 @@ var HStorageManager = {
     });
 
     busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
-      console.log('on Field [' + fieldname + ']: value: ' + inspect(val));
+      console.log('on Field [' + fieldname + ']: value: ' + val);
+      // filedata.params = {tag: val};
     });
 
     busboy.on('finish', function() {

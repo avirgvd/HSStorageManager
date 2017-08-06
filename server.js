@@ -125,6 +125,7 @@ app.post('/rest/file', function(req, resp){
 app.post('/rest/upload', function(req, res){
   // console.log("####get params: ", req);
   console.log("####write file: ", req.headers);
+  console.log("####write file params: ", req.params);
 
 //  The target container should be "PERSISTENT_STORAGE" by default unless specified in request body
 
