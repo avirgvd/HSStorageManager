@@ -28,7 +28,13 @@ app.use(function(req, res, next) {
 // parse application/json
 // To parse body coming with POST requests
 // Without this body will not be accessible in POST request handlers
-app.use(bodyParser.json());
+// app.use(bodyParser.json({}));
+// limit is set to a number in order to allow large file uploads
+app.use(bodyParser({limit: '50gb'}));
+app.use(bodyParser.urlencoded({limit: '50gb'}));
+app.use(bodyParser());
+
+
 
 /*
  * handler for http get requests for the file using object-id.

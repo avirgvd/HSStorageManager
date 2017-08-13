@@ -63,5 +63,7 @@ curl -XPOST localhost:9200/sm_objectstoreindex_system/_bulk -d '
 {"id":"Assets.jpg",  "path": "localsdd1:/system/Assets.jpg", "size": "13585", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Unknown.jpg"}}
 {"id":"Unknown.jpg",  "path": "localsdd1:/system/Unknown.jpg", "size": "4705", "mimetype": "image/jpeg"}
+{"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Settings.png"}}
+{"id":"Settings.png",  "path": "localsdd1:/system/Settings.png", "size": "67916", "mimetype": "image/png"}
 '
 

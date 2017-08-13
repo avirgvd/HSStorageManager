@@ -158,10 +158,12 @@ function getItems( index, params, query, callback1) {
 
   // the search can take fields and their values for filtering the resultset
   // The body section of the query statement 'param' will have filter conditons specified
+
+
   let searchrequest = {
     index: indexName,
-    from: params.from,
-    size: params.size,
+    from: (params.from === undefined) ? 0:params.from,
+    size: (params.size=== undefined) ? 1000:params.size,
     body: body
   };
 
