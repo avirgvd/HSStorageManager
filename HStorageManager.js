@@ -107,14 +107,19 @@ var HStorageManager = {
     });
   },
 
-  createNewFile: function(bucket, callback) {
+  createNewFile: function(bucket, filedata, callback) {
 
     console.log("createNewFile bucket: ", bucket);
     // console.log("createNewFile number of osds in bucket: ", bucket.osds.length);
 
     //  First generate UUID for new file's ObjID
     let objID = uuidv4();
-    var filedata = {id: objID, size: 0, status: 'staging', container: 'staging'};
+    // var filedata = {id: objID, size: 0, status: 'staging', container: 'staging'};
+    filedata['id'] = objID;
+    filedata['size'] = 0;
+    filedata['status'] = 'staging';
+    filedata['container'] = 'staging';
+
 
     // import date of the file
     var d = new Date();
@@ -310,32 +315,26 @@ var HStorageManager = {
 
   },
 
-  /**
-   * Method: addfile
-   * @param req
-   * @param res
-   *
-   * Description:
-   */
-  addfiles: function (req, res) {
-
+  // The multipart mime type is used when the files are submitted from forms.
+  // This function handles file upload requests from web browser clients
+  addFile_Multipart: function (req, res) {
+    console.log("addFile_Miltipart: ");
 
     // First add the file to staging area for extracting file meta data before moving it to persistent storage
     // Create a writable stream
     //   var writerStream = fs.createWriteStream(objID);
     let bucketObj = hashtable_buckets.get(staging_bucket);
 
-    // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
-    // HStorageManager.createNewFile(staging_bucket, function(writerStream, filedata){
 
     var busboy = new Busboy({headers: req.headers});
+    var returnfiledata = {};
 
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
       console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype);
 
       // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
-      HStorageManager.createNewFile(staging_bucket, function(writerStream, filedata){
-        console.log("addfiles: created the file: ", filedata);
+      HStorageManager.createNewFile(staging_bucket, {}, function(writerStream, filedata){
+        console.log("addFile_Multipart: created the file: ", filedata);
 
         filedata.orgfilename = filename;
         filedata.encoding = encoding;
@@ -351,19 +350,16 @@ var HStorageManager = {
 
         file.on('end', function() {
           console.log('on end File [' + filedata.id + '] Finished');
+          returnfiledata = filedata;
           // var promise = writerStream.close();
-           // Add file record in objectstorageindex.
+          // Add file record in objectstorageindex.
           HStorageManager.addNewFileIndex(bucketObj.id, filedata, function(){
 
-            console.log("addfiles: addNewFileIndex: ");
+            console.log("addFile_Multipart: addNewFileIndex: ");
 
           });
-
         });
-
-
       });
-
 
     });
 
@@ -375,7 +371,7 @@ var HStorageManager = {
     busboy.on('finish', function() {
       console.log('Done parsing form!');
       // writerStream.end();
-      res.writeHead(303, { Connection: 'close', Location: '/' });
+      res.writeHead(303, { Connection: 'close', FileData : {returnfiledata} });
       res.end();
 
 
@@ -384,11 +380,80 @@ var HStorageManager = {
     busboy.on('error', function() {
       console.log('Error parsing form!');
       writerStream.end();
-      res.writeHead(303, { Connection: 'close', Location: '/' });
+      res.writeHead(303, { Connection: 'error', FileData: {} });
       res.end();
     });
 
     req.pipe(busboy);
+
+  },
+
+  // This function handles fileupload requests made using rest calls
+  addFile_RestCall: function (req, res) {
+
+    // For fileupload using REST Call expect the file metadata in the headers with property 'metadata'
+    console.log("addFile_RestCall: metadata", req.headers['metadata']);
+
+    // First add the file to staging area for extracting file meta data before moving it to persistent storage
+    // Create a writable stream
+    //   var writerStream = fs.createWriteStream(objID);
+    let bucketObj = hashtable_buckets.get(staging_bucket);
+
+
+    var filesize = 0;
+
+    HStorageManager.createNewFile(staging_bucket, JSON.parse(req.headers['metadata']), function(writerStream, filedata){
+
+      req.on('data', function(chunk) {
+
+        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        writerStream.write(chunk);
+        filesize += chunk.length;
+
+        console.log("#########Size so far is: ", filesize);
+      }).on('end', function() {
+        console.log("Ended................");
+        console.log("%%%%%%%%%%% before addNewFileIndex");
+        filedata['size'] = filesize;
+
+        //  Add file record in objectstorageindex.
+        HStorageManager.addNewFileIndex(staging_bucket, filedata, function(){
+
+          console.log("_addfile: addNewFileIndex: ", filedata);
+          res.json({FileID : filedata.id });
+          res.end();
+
+        });
+
+      });
+    });
+
+
+  },
+
+  /**
+   * Method: addfile
+   * @param req
+   * @param res
+   *
+   * Description:
+   */
+  addfiles: function (req, res) {
+
+
+
+    // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
+    // HStorageManager.createNewFile(staging_bucket, function(writerStream, filedata){
+
+    console.log("addFiles: ", req.headers['content-type']);
+
+    if(req.headers['content-type'] && req.headers['content-type'].indexOf('multipart') === 0) {
+      HStorageManager.addFile_Multipart(req,res);
+    }
+    else {
+      HStorageManager.addFile_RestCall(req, res);
+    }
+
 
     // });
 

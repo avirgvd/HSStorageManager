@@ -46,11 +46,11 @@ curl -XPOST localhost:9200/sm_objectstoreindex_system/_bulk -d '
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "contacts.png"}}
 {"id":"contacts.png",  "path": "localsdd1:/system/contacts.png", "size": "22856", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "DigitalLibrary.png"}}
-{"id":"DigitalLibrary.png",  "path": "localsdd1:/system/DigitalLibrary.png", "size": "318405", "mimetype": "image/png"}
+{"id":"DigitalLibrary.png",  "path": "localsdd1:/system/DigitalLibrary.png", "size": "64601", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Financials.png"}}
-{"id":"Financials.png",  "path": "localsdd1:/system/Financials.png", "size": "65731", "mimetype": "image/png"}
+{"id":"Financials.png",  "path": "localsdd1:/system/Financials.png", "size": "45500", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "medical_records.png"}}
-{"id":"medical_records.png",  "path": "localsdd1:/system/medical_records.png", "size": "17080", "mimetype": "image/png"}
+{"id":"medical_records.png",  "path": "localsdd1:/system/medical_records.png", "size": "15123", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "photos.png"}}
 {"id":"photos.png",  "path": "localsdd1:/system/photos.png", "size": "3376", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Music.jpg"}}
@@ -60,10 +60,16 @@ curl -XPOST localhost:9200/sm_objectstoreindex_system/_bulk -d '
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "travel.jpg"}}
 {"id":"travel.jpg",  "path": "localsdd1:/system/travel.jpg", "size": "8925", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Assets.jpg"}}
-{"id":"Assets.jpg",  "path": "localsdd1:/system/Assets.jpg", "size": "13585", "mimetype": "image/jpeg"}
+{"id":"Assets.jpg",  "path": "localsdd1:/system/Assets.jpg", "size": "15287", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Unknown.jpg"}}
 {"id":"Unknown.jpg",  "path": "localsdd1:/system/Unknown.jpg", "size": "4705", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Settings.png"}}
-{"id":"Settings.png",  "path": "localsdd1:/system/Settings.png", "size": "67916", "mimetype": "image/png"}
+{"id":"Settings.png",  "path": "localsdd1:/system/Settings.png", "size": "85760", "mimetype": "image/png"}
 '
 
+#the below command wont delete documents from index as expected
+curl -XDELETE 'http://localhost:9200/sm_objectstoreindex_staging/sm_objectstoreindex_staging/_query' -d '{
+    "query" : {
+        "match_all" : {}
+    }
+}'
