@@ -49,6 +49,10 @@ var LocalStorage = {
 
   },
 
+  deleteFile: function(osd, relativepath) {
+    fs.unlink(osd.path + "/" + relativepath);
+  }
+
 };
 
 module.exports = LocalStorage;

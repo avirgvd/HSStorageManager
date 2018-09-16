@@ -51,6 +51,10 @@ var LocalSSD = {
 
   },
 
+  deleteFile: function(osd, relativepath) {
+    return fs.unlink(osd.path + "/" + relativepath);
+  }
+
 };
 
 module.exports = LocalSSD;

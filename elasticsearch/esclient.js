@@ -118,10 +118,8 @@ function getItem(index, id, query, callback) {
       console.log("getItem: param@@@@@@@@@@@@: ", param);
 
       console.log("getItem: resp length: ",resp.hits.hits.length);
-      console.log("getItem: resp: ",resp.hits.hits);
 
       if(resp.hits.hits.length) {
-        console.log("getItem: resp: ",resp.hits.hits[0]['_source']);
         callback(undefined, resp.hits.hits[0]['_source']);
       }
       else

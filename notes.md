@@ -16,3 +16,5 @@ Observations:
 Date: Jun 2 2017:
 Properties for "sm_objectstoreindex":
 _id: <obj id for the file>
+
+

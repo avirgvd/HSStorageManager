@@ -41,7 +41,7 @@ app.use(bodyParser());
  * The GET request should be typically like http://hostname:3000/<filename>
  * The request param 'file' has the file name to fetch
  * */
-app.get('/rest/:bucket/:file', function(req, resp){
+app.get('/rest/file/:bucket/:file', function(req, resp){
   console.log("get query: ", req.query);
   console.log("get params: ", req.params);
   console.log("get file: ", req.params.file);
@@ -50,7 +50,7 @@ app.get('/rest/:bucket/:file', function(req, resp){
 
   storagemanager.getFile(params.bucket, params.file, req.query, function(err, filestream, filemeta){
 
-    console.log("GET /rest/:bucket/:file filemeta: ", filemeta);
+    console.log("GET /rest/:bucket/:file filemeta: ", filemeta['path']);
 
     if(filestream != undefined) {
       resp.setHeader('Content-Type', filemeta.mimetype);
@@ -61,6 +61,24 @@ app.get('/rest/:bucket/:file', function(req, resp){
       resp.json({"result": "empty"});
     }
 
+  });
+
+});
+
+
+/*
+ * Get the file object's meta data from the elasticsearch index
+ * 
+ * 
+**/
+app.get('/rest/meta/:bucket/:file', function(req, resp){
+
+  var params = req.params;
+  
+  storagemanager.getObjectMeta(params.bucket, params.file, function(err, filemeta){
+    console.log("GET /rest/meta/:bucket/:file filemeta: ". filemeta);
+    resp.setHeader('Content-Type', "application/json");    
+    resp.json(filemeta);
   });
 
 });
@@ -79,6 +97,22 @@ app.post('/rest/bulkmove', function(req, resp){
   });
 
 });
+
+// Moves specified file using ObjID to a target bucket and update object index
+// Example: body = {'params': {'sourcebucket': 'staging', 'targetbucket': 'photos', 'fileslist': listfilemetas}}
+app.post('/rest/bulkmove1', function(req, resp){
+  
+    var params = req.params;
+    var body = req.body;
+    console.log("/rest/bunkmove1 request params: ", params);
+    console.log("/rest/bunkmove1 request body: ", body);
+  
+    storagemanager.bulkmove1(body.params.fileslist, body.params.sourcebucket, body.params.targetbucket, function(err, result){
+      resp.json({"result": "done"});
+    });
+  
+  });
+  
 
 // Moves specified file using ObjID to a target bucket and update object index
 app.post('/rest/bulkupdate', function(req, resp){
@@ -136,7 +170,7 @@ app.post('/rest/upload', function(req, res){
 //  The target container should be "PERSISTENT_STORAGE" by default unless specified in request body
 
 
-  storagemanager.addfiles(req, res);
+  storagemanager.addfiles(req, res, stage=true);
 
 
 
