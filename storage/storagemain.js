@@ -322,7 +322,7 @@ var StorageMain = {
 
   // The multipart mime type is used when the files are submitted from forms.
   // This function handles file upload requests from web browser clients
-  addFile_Multipart: function (req, res) {
+  addFile_Multipart: function (req, res, context) {
     console.log("addFile_Miltipart: ");
 
     // First add the file to staging area for extracting file meta data before moving it to persistent storage
@@ -333,7 +333,7 @@ var StorageMain = {
 
     var busboy = new Busboy({headers: req.headers});
     var returnfiledata = {};
-    var fieldData = {'category': "", 'directory': ""};
+    var fieldData = context;
 
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
       console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype );
@@ -377,7 +377,7 @@ var StorageMain = {
     busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
       console.log('on Field [' + fieldname + ']: value: ' + val);
 
-      fieldData = JSON.parse(val);
+      // fieldData = JSON.parse(val);
     });
 
     busboy.on('finish', function() {

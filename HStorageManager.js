@@ -163,16 +163,16 @@ var HStorageManager = {
    *
    * Description:
    */
-  addfiles: function (req, res, stage) {
+  addfiles: function (req, res, context, stage) {
 
     console.log("addFiles: ", req.headers['content-type']);
     console.log("addFiles: staging required ", stage);
 
     if(req.headers['content-type'] && req.headers['content-type'].indexOf('multipart') === 0) {
-      storagemain.addFile_Multipart(req,res);
+      storagemain.addFile_Multipart(req,res, context);
     }
     else {
-      storagemain.addFile_RestCall(req, res);
+      storagemain.addFile_RestCall(req, res, context);
     }
 
   },

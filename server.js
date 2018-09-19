@@ -166,11 +166,14 @@ app.post('/rest/upload', function(req, res){
   // console.log("####get params: ", req);
   console.log("####write file: ", req.headers);
   console.log("####write file params: ", req.params);
+  console.log("####write file params: ", req.query);
+
+  let context = JSON.parse(req.query.context);
 
 //  The target container should be "PERSISTENT_STORAGE" by default unless specified in request body
 
 
-  storagemanager.addfiles(req, res, stage=true);
+  storagemanager.addfiles(req, res, context, stage=true);
 
 
 
