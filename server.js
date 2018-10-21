@@ -120,9 +120,10 @@ app.post('/rest/bulkupdate', function(req, resp){
   var params = req.params;
   var body = req.body;
   console.log("/rest/bulkupdate request params: ", params);
-  console.log("/rest/bulkupdate request body: ", body);
+  // console.log("/rest/bulkupdate request body: ", body);
 
   storagemanager.bulkupdate(body, function(err, result){
+    console.log("/rest/bulkupdate request DONEEEEEEE: ");
     resp.json({"result": "done"});
   });
 
@@ -164,9 +165,9 @@ app.post('/rest/file', function(req, resp){
  */
 app.post('/rest/upload', function(req, res){
   // console.log("####get params: ", req);
-  console.log("####write file: ", req.headers);
+  console.log("/rest/upload params: ", req.params);
   console.log("####write file params: ", req.params);
-  console.log("####write file params: ", req.query);
+  console.log("####write file query: ", req.query);
 
   let context = JSON.parse(req.query.context);
 

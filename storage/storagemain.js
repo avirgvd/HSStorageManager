@@ -212,7 +212,7 @@ var StorageMain = {
 
           var filestream = StorageMain.getFileFromPath(result['path']);
           
-          var thumbnailstream = hsthumbnails.getThumbnail(result["mimetype"], filestream);
+          var thumbnailstream = hsthumbnails.getThumbnail(result["mimetype"], filestream, result['id']);
 
           // The thumbnail doesnt exist so create one
           // Now save this thumbnail to the bucket for thumbnails same time this file read stream is returned to caller
@@ -599,13 +599,13 @@ var StorageMain = {
 
   bulkupdate: function(arrUpdateItems, callback) {
 
-    console.log("bulkupdate: ", arrUpdateItems);
+    // console.log("bulkupdate: ", arrUpdateItems);
 
     var arrESUpdateItems = [];
 
     arrUpdateItems.map(( updateItem) => {
 
-      console.log("updateItem: ", updateItem);
+      // console.log("updateItem: ", updateItem);
 
       var indexname = StorageMain.getIndexForBucket(updateItem['container']);
 
@@ -639,7 +639,8 @@ var StorageMain = {
         console.log("bulkmove: metadata: ", metadata);
 
         metadata.container = item.targetbucket;
-        metadata.status = "online"; // this document will not be online
+        // Commented below line to retain status from Staging phase. After first level processing in staging, the status will be 'stage1'
+        // metadata.status = "online"; // this document will not be online
 
         return StorageMain._addfile(item.targetbucket, metadata, filestream, function(err, resp){
 

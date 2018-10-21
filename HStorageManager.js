@@ -196,7 +196,7 @@ var HStorageManager = {
 
   bulkupdate: function(arrUpdateItems, callback) {
 
-    storagemain.bulkupdate(arrESUpdateItems, callback);
+    storagemain.bulkupdate(arrUpdateItems, callback);
 
   },
 
