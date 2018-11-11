@@ -44,27 +44,27 @@ curl -XPOST localhost:9200/sm_oscontainersindex/_bulk -d '
 
 curl -XPOST localhost:9200/sm_objectstoreindex_system/_bulk -d '
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "contacts.png"}}
-{"id":"contacts.png",  "path": "localsdd1:/system/contacts.png", "size": "22856", "mimetype": "image/png"}
+{"id":"contacts.png",  "path": "localsdd1:/system/contacts.png", "size": "9199", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "DigitalLibrary.png"}}
-{"id":"DigitalLibrary.png",  "path": "localsdd1:/system/DigitalLibrary.png", "size": "64601", "mimetype": "image/png"}
+{"id":"DigitalLibrary.png",  "path": "localsdd1:/system/DigitalLibrary.png", "size": "27323", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Financials.png"}}
-{"id":"Financials.png",  "path": "localsdd1:/system/Financials.png", "size": "45500", "mimetype": "image/png"}
+{"id":"Financials.png",  "path": "localsdd1:/system/Financials.png", "size": "19939", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "medical_records.png"}}
-{"id":"medical_records.png",  "path": "localsdd1:/system/medical_records.png", "size": "15123", "mimetype": "image/png"}
+{"id":"medical_records.png",  "path": "localsdd1:/system/medical_records.png", "size": "8345", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "photos.png"}}
-{"id":"photos.png",  "path": "localsdd1:/system/photos.png", "size": "3376", "mimetype": "image/png"}
+{"id":"photos.png",  "path": "localsdd1:/system/photos.png", "size": "6552", "mimetype": "image/png"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Music.jpg"}}
-{"id":"Music.jpg",  "path": "localsdd1:/system/Music.jpg", "size": "7661", "mimetype": "image/jpeg"}
+{"id":"Music.jpg",  "path": "localsdd1:/system/Music.jpg", "size": "4139", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Videos.jpg"}}
-{"id":"Videos.jpg",  "path": "localsdd1:/system/Videos.jpg", "size": "5376", "mimetype": "image/jpeg"}
+{"id":"Videos.jpg",  "path": "localsdd1:/system/Videos.jpg", "size": "3198", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "travel.jpg"}}
-{"id":"travel.jpg",  "path": "localsdd1:/system/travel.jpg", "size": "8925", "mimetype": "image/jpeg"}
+{"id":"travel.jpg",  "path": "localsdd1:/system/travel.jpg", "size": "4308", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Assets.jpg"}}
-{"id":"Assets.jpg",  "path": "localsdd1:/system/Assets.jpg", "size": "15287", "mimetype": "image/jpeg"}
+{"id":"Assets.jpg",  "path": "localsdd1:/system/Assets.jpg", "size": "6454", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Unknown.jpg"}}
-{"id":"Unknown.jpg",  "path": "localsdd1:/system/Unknown.jpg", "size": "4705", "mimetype": "image/jpeg"}
+{"id":"Unknown.jpg",  "path": "localsdd1:/system/Unknown.jpg", "size": "3971", "mimetype": "image/jpeg"}
 {"index": {"_index": "sm_objectstoreindex_system", "_type": "sm_objectstoreindex_system", "_id": "Settings.png"}}
-{"id":"Settings.png",  "path": "localsdd1:/system/Settings.png", "size": "85760", "mimetype": "image/png"}
+{"id":"Settings.png",  "path": "localsdd1:/system/Settings.png", "size": "28732", "mimetype": "image/png"}
 '
 
 #the below command wont delete documents from index as expected
