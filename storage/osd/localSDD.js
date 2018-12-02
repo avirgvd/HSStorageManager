@@ -23,7 +23,7 @@ var LocalSSD = {
 
         console.log('LocalSSD:createFile: bucket path: ', bucketpath);
 
-        filedata.path =  osd['id'] + ":" + bucket['basepath'] + "/" + filedata.id;
+        filedata.path =  osd['name'] + ":" + bucket['basepath'] + "/" + filedata.id;
         var writerStream = fs.createWriteStream(bucketpath + filedata.id);
 
         writerStream.on('open', (chunk) => {

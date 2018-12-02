@@ -1,0 +1,73 @@
+{
+  "storagedevices": [
+    {
+      "name": "localhdd1",
+      "protocol": "file",
+      "device-id": "",
+      "device-type": "localHDD",
+      "credentials": {},
+      "permission": "rw",
+      "path": "/home/govind/HomeServer/LOCALSTORAGE"
+    },
+    {
+      "name": "localhdd2",
+      "protocol": "file",
+      "device-id": "",
+      "device-type": "localHDD",
+      "credentials": {},
+      "permission": "rw",
+      "path": "/home/govind/HomeServer/LOCALSTORAGE2"
+    },
+    {
+      "name": "localsdd1",
+      "protocol": "file",
+      "description": "For file cache and thumbnails",
+      "device-id": "",
+      "device-type": "localSDD",
+      "credentials": {},
+      "permission": "rw",
+      "path": "/home/govind/HomeServer/LOCALSDD"
+    },
+    {
+      "name": "google-drive",
+      "protocol": "url",
+      "description": "For tier-2 user files",
+      "device-id": "",
+      "device-type": "cloud",
+      "credentials": {},
+      "permission": "rw",
+      "path": ""
+    },
+    {
+      "name": "cloud-s3",
+      "protocol": "url",
+      "description": "For tier-2 user files",
+      "device-id": "",
+      "device-type": "cloud",
+      "credentials": {},
+      "permission": "rw",
+      "path": ""
+    },
+    {
+      "name": "usb",
+      "protocol": "file",
+      "description": "Backup or tier-2 user files",
+      "device-id": "",
+      "device-type": "USB-mass-storage",
+      "credentials": {},
+      "permission": "rw",
+      "path": ""
+    },
+    {
+      "name": "nfs",
+      "protocol": "nfs",
+      "description": "Backup or tier-2 user files",
+      "device-id": "",
+      "device-type": "For tier-3 user content",
+      "credentials": {},
+      "permission": "rw",
+      "path": ""
+    }
+  ]
+}
+

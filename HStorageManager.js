@@ -19,8 +19,6 @@ var Busboy = require('busboy');
 
 var Map = require('hashtable');
 
-var hashtable_buckets = new Map();
-var hashtable_OSDs = new Map();
 var staging_bucket = "staging";
 
 var HStorageManager = {
@@ -50,10 +48,6 @@ var HStorageManager = {
   addFile_Multipart: function (req, res) {
     console.log("addFile_Miltipart: ");
 
-    // First add the file to staging area for extracting file meta data before moving it to persistent storage
-    // Create a writable stream
-    //   var writerStream = fs.createWriteStream(objID);
-    let bucketObj = hashtable_buckets.get(staging_bucket);
 
 
     var busboy = new Busboy({headers: req.headers});
@@ -62,7 +56,6 @@ var HStorageManager = {
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
       console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype);
 
-      // HStorageManager.createNewFile(bucketObj, function(writerStream, filedata){
       storagemain.createNewFile(staging_bucket, {}, function(writerStream, filedata){
         console.log("addFile_Multipart: created the file: ", filedata);
 

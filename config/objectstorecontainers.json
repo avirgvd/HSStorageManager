@@ -1,0 +1,102 @@
+{
+  "storagecontainers": [
+    {
+      "name": "staging",
+      "description": "Bucket for staging newly added file",
+      "policyJSON": { },
+      "osds": [
+        "localsdd1"
+      ],
+      "basepath": "/staging",
+      "containertype": "staging"
+    },
+    {
+      "name": "system",
+      "description": "For storing system files",
+      "policyJSON": { },
+      "osds": [
+        "localhdd1"
+      ,
+        "localhdd2"
+      ],
+      "basepath": "/system",
+      "containertype": "system"
+    },
+    {
+      "name": "system-cache",
+      "description": "For caching system files",
+      "policyJSON": { },
+      "osds": [
+        "localsdd1"
+      ],
+      "basepath": "/system-cache",
+      "containertype": "cache"
+    },
+    {
+      "name": "media1",
+      "description": "For tier-1 user media files",
+      "policyJSON": { },
+      "osds": [
+        "localhdd1"
+      ,
+        "localhdd2"
+      ],
+      "basepath": "/media1",
+      "containertype": "media"
+    },
+    {
+      "name": "media-old",
+      "description": "For tier-2 user media files",
+      "policyJSON": { },
+      "osds": [
+        "google-drive"
+      ],
+      "basepath": "/media1-old",
+      "containertype": "media"
+    },
+    {
+      "name": "backup",
+      "description": "For backup",
+      "policyJSON": { },
+      "osds": [
+        "usb"
+      ],
+      "basepath": "/backup",
+      "containertype": "backup"
+    },
+    {
+      "name": "thumbnails",
+      "description": "For storing thumbnails of media and docs",
+      "policyJSON": { },
+      "osds": [
+        "localsdd1"
+      ],
+      "basepath": "/thumbnails",
+      "containertype": "thumbnails"
+    },
+    {
+      "name": "docs",
+      "description": "For tier-1 user docs",
+      "policyJSON": { },
+      "osds": [
+        "localhdd1"
+      ,
+        "localhdd2"
+      ],
+      "basepath": "/docs",
+      "containertype": "docs"
+    },
+    {
+      "name": "docs-old",
+      "description": "For tier-2 user docs",
+      "policyJSON": { },
+      "osds": [
+        "localhdd1"
+      ,
+        "localhdd2"
+      ],
+      "basepath": "/docs-old",
+      "containertype": "docs"
+    }
+  ]
+}

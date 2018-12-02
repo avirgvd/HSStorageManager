@@ -55,32 +55,13 @@ var StorageMain = {
   loadBucketsTable: function(callback) {
     console.log("loadBucketsTable");
 
-    esclient.getItems("sm_oscontainersindex", {}, {}, function(err, result){
-      // console.log("loadBucketsTable result: ", JSON.stringify(result.items));
+    fs.readFile("./config/objectstorecontainers.json", function(err, data){
+      var jsondata = JSON.parse(data);
+      console.log("loadBucketsTable result: ", jsondata);
+      jsondata.storagecontainers.map((bucketitem) => {
 
-      result.items.map((bucketitem) => {
-
-        // console.log("===>", bucketitem);
-        hashtable_buckets.put(bucketitem.id, bucketitem);
-      });
-
-      console.log("hashmap size is: ", hashtable_buckets.size());
-      callback();
-      // console.log("hashmap for media1: ", hashtable_buckets.get("media1"));
-
-    });
-
-  },
-
-  loadOSDTable: function(callback) {
-    console.log("loadOSDTable");
-
-    esclient.getItems("sm_osdindex", {}, {}, function(err, result){
-      // console.log("loadOSDTable result: ", JSON.stringify(result.items));
-      result.items.map((osditem) => {
-
-        // console.log("===>", osditem);
-        hashtable_OSDs.put(osditem.id, osditem);
+        console.log("===>", bucketitem);
+        hashtable_buckets.put(bucketitem.name, bucketitem);
       });
 
       console.log("hashmap size is: ", hashtable_OSDs.size());
@@ -88,6 +69,55 @@ var StorageMain = {
       // console.log("hashmap for media1: ", hashtable_buckets.get("media1"));
 
     });
+
+
+    // esclient.getItems("sm_oscontainersindex", {}, {}, function(err, result){
+    //   // console.log("loadBucketsTable result: ", JSON.stringify(result.items));
+    //
+    //   result.items.map((bucketitem) => {
+    //
+    //     // console.log("===>", bucketitem);
+    //     hashtable_buckets.put(bucketitem.id, bucketitem);
+    //   });
+    //
+    //   console.log("hashmap size is: ", hashtable_buckets.size());
+    //   callback();
+    //   // console.log("hashmap for media1: ", hashtable_buckets.get("media1"));
+    //
+    // });
+
+  },
+
+  loadOSDTable: function(callback) {
+    console.log("loadOSDTable");
+
+    fs.readFile("./config/objectstoredevices.json", function(err, data){
+      var jsondata = JSON.parse(data);
+      console.log("loadOSDTable result: ", jsondata);
+      jsondata.storagedevices.map((osditem) => {
+
+        console.log("===>", osditem);
+        hashtable_OSDs.put(osditem.name, osditem);
+      });
+
+      console.log("hashmap size is: ", hashtable_OSDs.size());
+      callback();
+      // console.log("hashmap for media1: ", hashtable_buckets.get("media1"));
+
+    });
+    // esclient.getItems("sm_osdindex", {}, {}, function(err, result){
+    //   // console.log("loadOSDTable result: ", JSON.stringify(result.items));
+    //   result.items.map((osditem) => {
+    //
+    //     // console.log("===>", osditem);
+    //     hashtable_OSDs.put(osditem.id, osditem);
+    //   });
+    //
+    //   console.log("hashmap size is: ", hashtable_OSDs.size());
+    //   callback();
+    //   // console.log("hashmap for media1: ", hashtable_buckets.get("media1"));
+    //
+    // });
   },
 
   addNewFileIndex: function( bucket, filedata, callback1) {
@@ -364,7 +394,7 @@ var StorageMain = {
           returnfiledata = filedata;
           // var promise = writerStream.close();
           // Add file record in objectstorageindex.
-          StorageMain.addNewFileIndex(bucketObj.id, filedata, function(){
+          StorageMain.addNewFileIndex(bucketObj.name, filedata, function(){
 
             console.log("addFile_Multipart: addNewFileIndex: ");
 

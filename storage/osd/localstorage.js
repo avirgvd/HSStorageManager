@@ -25,7 +25,7 @@ var LocalStorage = {
     console.log("localStorage:createFile: 123: ");
 
 
-    filedata.path =  osd['id'] + ":" + bucket['basepath'] + "/" + filedata.id;
+    filedata.path =  osd['name'] + ":" + bucket['basepath'] + "/" + filedata.id;
     console.log("localStorage:createFile: filedata.path: ", filedata.path);
 
     var writerStream = fs.createWriteStream(bucketpath + filedata.id);
