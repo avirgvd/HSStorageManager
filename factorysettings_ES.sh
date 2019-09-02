@@ -5,9 +5,9 @@
 
 curl -XPOST localhost:9200/sm_osdindex/_bulk -d '
 {"index": {"_index": "sm_osdindex", "_type": "sm_osdindex", "_id": "localhdd1"}}
-{ "id": "localhdd1", "protocol": "file", "device-id": "", "device-type": "localHDD", "credentials": {}, "permission": "rw","path": "/home/govind/HomeServer/LOCALSTORAGE"}
+{ "id": "localhdd1", "protocol": "file", "device-id": "", "device-type": "localHDD", "credentials": {}, "permission": "rw","path": "/home/govind/HDD/LOCALSTORAGE"}
 {"index": {"_index": "sm_osdindex", "_type": "sm_osdindex", "_id": "localhdd2"}}
-{ "id": "localhdd2", "protocol": "file", "device-id": "", "device-type": "localHDD", "credentials": {}, "permission": "rw", "path": "/home/govind/HomeServer/LOCALSTORAGE2"}
+{ "id": "localhdd2", "protocol": "file", "device-id": "", "device-type": "localHDD", "credentials": {}, "permission": "rw", "path": "/home/govind/HDD/LOCALSTORAGE2"}
 {"index": {"_index": "sm_osdindex", "_type": "sm_osdindex", "_id": "localsdd1"}}
 { "id": "localsdd1", "protocol": "file", "description": "For file cache and thumbnails", "device-id": "", "device-type": "localSDD", "credentials": {}, "permission": "rw", "path": "/home/govind/HomeServer/LOCALSDD"}
 {"index": {"_index": "sm_osdindex", "_type": "sm_osdindex", "_id": "google-drive"}}

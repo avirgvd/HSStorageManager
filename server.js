@@ -165,6 +165,8 @@ app.post('/rest/settings', function(req, resp){
 
   var params = req.body.params;
 
+  resp.json(storagemanager.getSettings());
+
   // storagemanager.getFile(params.bucket, params.objid, {}, function(err, filestream, filemeta){
   //
   //   console.log("POST /rest/file filemeta: ", filemeta);

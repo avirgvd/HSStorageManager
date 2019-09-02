@@ -29,6 +29,10 @@ var HStorageManager = {
 
   },
 
+  getSettings: function(){
+    return storagemain.getSettings();
+  },
+
   getObjectMeta: function(bucket, fileID, callback) {
 
     storagemain.getObjectMeta(bucket, fileID, callback);

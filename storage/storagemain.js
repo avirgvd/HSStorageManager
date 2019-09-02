@@ -28,28 +28,22 @@ var StorageMain = {
 
   init: function(){
 
-    let allIndices = _.assign({}, esIndicesConfig.storagemanagerIndices);
-    esclient.initIndices(allIndices, function(){
-      console.log("init - inside callback");
+    StorageMain.loadBucketsTable(function(){
+      StorageMain.loadOSDTable(function(){
 
-      StorageMain.loadBucketsTable(function(){
-        StorageMain.loadOSDTable(function(){
-
-          // // TEST CODE TO BE REMOVED
-          // StorageMain.getFile("staging", "314b9738-416f-44d9-87e2-92d7007a95f5", function(err, result){
-          //
-          // });
-          // // StorageMain.createFile(hashtable_buckets.get(staging_bucket), "abc");
-          // StorageMain.moveobject('306d78e2-58f9-45d3-bdc8-e7f339e9bef7', 'staging', 'media1', function(){
-          //   console.log("@@@@@@@@@@@@@@");
-          // });
-
-        });
+        // // TEST CODE TO BE REMOVED
+        // StorageMain.getFile("staging", "314b9738-416f-44d9-87e2-92d7007a95f5", function(err, result){
+        //
+        // });
+        // // StorageMain.createFile(hashtable_buckets.get(staging_bucket), "abc");
+        // StorageMain.moveobject('306d78e2-58f9-45d3-bdc8-e7f339e9bef7', 'staging', 'media1', function(){
+        //   console.log("@@@@@@@@@@@@@@");
+        // });
 
       });
 
     });
-
+    
   },
 
   loadBucketsTable: function(callback) {
@@ -118,6 +112,21 @@ var StorageMain = {
     //   // console.log("hashmap for media1: ", hashtable_buckets.get("media1"));
     //
     // });
+  },
+
+  getSettings: function() {
+
+    var containers = JSON.parse(JSON.stringify(hashtable_buckets));
+    var devices = JSON.parse(JSON.stringify(hashtable_OSDs));
+
+    var settings = {
+      "containers": containers,
+      "devices": devices
+    };
+
+    return settings;
+
+
   },
 
   addNewFileIndex: function( bucket, filedata, callback1) {

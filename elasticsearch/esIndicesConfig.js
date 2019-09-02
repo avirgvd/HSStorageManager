@@ -1,48 +1,6 @@
 // (C) Copyright 2016 Hewlett Packard Enterprise Development LP
 'use strict';
 
-var storagemanagerIndices = {
-  'sm_objectstoreindex': {
-    'index': 'sm_objectstoreindex',
-    'type': 'sm_objectstoreindex',
-    'id': 'sm_objectstoreindex',
-    'body': {
-      'settings': {
-        'number_of_shards': 1,
-        'number_of_replicas': 1
-      },
-      'mappings': {
-      }
-    }
-  },
-  'sm_oscontainersindex': {
-    'index': 'sm_oscontainersindex',
-    'type': 'sm_oscontainersindex',
-    'id': 'sm_oscontainersindex',
-    'body': {
-      'settings': {
-        'number_of_shards': 1,
-        'number_of_replicas': 1
-      },
-      'mappings': {
-      }
-    }
-  },
-  'sm_osdindex': {
-    'index': 'sm_osdindex',
-    'type': 'sm_osdindex',
-    'id': 'sm_osdindex',
-    'body': {
-      'settings': {
-        'number_of_shards': 1,
-        'number_of_replicas': 1
-      },
-      'mappings': {
-      }
-    }
-  }
-};
-
 
 var defaultAnalysis = {
   'filter': {
@@ -92,5 +50,4 @@ var defaultAnalysis = {
   }
 };
 
-exports.storagemanagerIndices = storagemanagerIndices;
 exports.defaultAnalysis = defaultAnalysis;
